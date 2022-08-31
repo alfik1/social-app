@@ -40,3 +40,4 @@ class PostView(ViewSet):
         instance=Posts.objects.get(id=id)
         instance.delete()
         return Response({"message":"Deleted"})
+
