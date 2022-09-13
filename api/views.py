@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ViewSet
+from rest_framework.decorators import authentication_classes
+from rest_framework.viewsets import ViewSet,ModelViewSet
 from api.serializers import PostSerializer, UserSerializer
 from rest_framework.response import Response
 from api.models import Posts
 from rest_framework import authentication, permissions
+
 
 
 # Create your views here.
@@ -11,7 +13,7 @@ from rest_framework import authentication, permissions
 # view To list all Posts
 #authentication and permissions
 class PostView(ViewSet):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
@@ -59,3 +61,10 @@ class UsersView(ViewSet):
             return Response(data=serializer.data)
         else:
             return Response(data=serializer.errors)
+
+class PostModelView(ModelViewSet):
+    serializer_class = PostSerializer
+    queryset = Posts.objects.all()
+    authentication_classes=[authentication.TokenAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+
